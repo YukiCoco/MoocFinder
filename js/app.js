@@ -6,13 +6,14 @@ const headers = { //抓包得到的Header
 var courseId;
 
 $(document).ready(function(){
-    $('.modal').modal(); //消息弹窗
+    $('.modal').modal(); //消息弹窗初始化
   });
 
 $('form').submit(function () { 
-    return false; //不刷新
+    return false; //表单提交不刷新
 });
 
+/* 实力白写代码55555555555555555555555555555555555555
 function search(){
     showProgressBar();
     var data = {
@@ -35,9 +36,7 @@ function search(){
     );
     hideProgressBar();
 }
-/**
- * @param  {json} courses 加载课程内容
- */
+//@param  {json} courses 加载课程内容
 function loadCourses(courses) {
     $('#course-search-result').empty();
     var model = "";
@@ -68,12 +67,12 @@ function loadCourses(courses) {
 
 function showCourseDetail(ele){
     showProgressBar();
-    //你爸爸的爸爸233
+    你爸爸的爸爸233
     var id = $(ele).parent().parent().siblings('span').text();
     var model = "";
     var detail;
     courseId = coursesJson[id]['id']; //先获取课程id 查答案用得到
-    //获取detail model
+    获取detail model
     $.ajax({
         type: "GET",
         async: false, //非异步获取 下面会用到
@@ -90,7 +89,7 @@ function showCourseDetail(ele){
         id : coursesJson[id]['id']
     }
     var courseDetail = $(model);
-    //获取内容
+    获取内容
     $.ajax({
         type: "POST",
         url: "https://tiku.xuexibao.tech/api/mobile/Index/goodsDetail",
@@ -104,7 +103,7 @@ function showCourseDetail(ele){
             console.log(errorThrown);
         }
     });
-
+    console.log(detail);
     addNavItem('课程内容');
     $('#course-search-result').empty();
     for (let index = 0; index < detail['free']['file'].length; index++) {
@@ -122,12 +121,13 @@ function showCourseDetail(ele){
     hideProgressBar();
 }
 
-//回到页面展示Courses
+回到页面展示Courses
 function showCourses(){
     $('#nav').empty();
     addNavItem('搜索结果','showCourses');
     loadCourses(coursesJson);
 }
+*/
 
 //添加导航内容
 function addNavItem(str,funcName){
@@ -140,12 +140,18 @@ function addNavItem(str,funcName){
 }
 
 function searchAnwser(){
+    showProgressBar();
     data = {
         goods_id : courseId,
         index : Number($(":selected").val()),
-        content : $('#course-input').prop('value')
+        content : $('#input-name').prop('value')
     }
-    console.log('id:' + courseId);
+    //这里是利用了助课宝接口漏洞
+    if($('#rad-zhihuishu').prop('checked')){
+        data['goods_id'] = 28303;
+    } else{
+        data['goods_id'] = 7463;
+    }
     var result;
     $.ajax({
         type: "POST",
@@ -171,25 +177,24 @@ function searchAnwser(){
     anwserItem.removeClass('answer-item-temple');
     for (let index = 0; index < result['data'].length; index++) {
         const element = result['data'][index];
-        anwserItem.find('.question').text('题目：' + element['question']);
-        anwserItem.find('.anwser').text('答案：' + element['answer']);
+        
+        anwserItem.find('.question').text(element['question']).prepend($('<b></b>').text('题目：'));
+        anwserItem.find('.anwser').text(element['answer']).prepend($('<b></b>').text('答案：'));
         $(anwserItem).clone().appendTo('#answer-content'); //从第一个模版Clone出来
     }
     anwserItem.addClass('answer-item-temple');
     anwserItem.addClass('hidden'); //把模版隐藏
     //$('.answer-content').css('display','inline');
+    hideProgressBar();
 }
 
 function showToast(msg,msgtype) {
     if(msgtype == 'error'){
-        M.toast({html: '<i class="material-icons"> error </i>' + msg,classes: 'toast-warning'}) //出错
+        M.toast({html: '<i class="material-icons"> error </i>' + msg,classes: 'toast-warning'}); //出错
+        hideProgressBar();
         return;
     }
     M.toast({html: '<i class="material-icons">done</i>' + msg})
-}
-
-function giveMeCola(){
-
 }
 
 function showProgressBar() {
@@ -200,8 +205,8 @@ function hideProgressBar() {
     $('.progress').addClass('hidden');
 }
 
-//跳转回原页面
+//删除搜索内容
 //Time machine！
 function timeJump() {
-    location.reload();
+    $('#answer-content').empty();
 }

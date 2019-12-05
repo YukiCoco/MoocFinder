@@ -24,7 +24,7 @@
             <h4 class="center-align mouse-pointer" onclick="timeJump()">Mooc Finder</h4>
           </div>
           <div class="col l8 offset-l2 s10 offset-s1">
-            <form id="searchForm" onsubmit="search();">
+            <form id="searchForm" onsubmit="searchAnwser();">
               <div class="row search-row">
                 <div class="col s12">
                   <label>
@@ -38,7 +38,7 @@
                 </div>
                 <div class="col s12">
                   <div class="card hoverable">
-                    <input id="input-name" name="name" type="text" class="search-input" placeholder="输入课程名">
+                    <input id="input-name" name="name" type="text" class="search-input" placeholder="输入问题,我告诉你答案">
                   </div>
                 </div>
               </div>
@@ -61,6 +61,19 @@
                   </div>
               </div>
               <!-- 这里添加内容 -->
+              <div class="col s12">
+                  <div class="answer-content">
+                      <div class="answer-item-temple card card-style hidden">
+                          <div>
+                                  <p class="question">题目：</p>
+                                  <p class="anwser">答案：</p>
+                          </div>
+                      </div>
+                      <div id="answer-content">
+                          
+                      </div>
+                  </div>
+              </div>
             </div>
           </div>
         </div>

@@ -68,3 +68,7 @@ main {
     object-fit: cover;
     width: 339px;
 }
+
+.card-course-search{
+    height: 216px !important;
+}
