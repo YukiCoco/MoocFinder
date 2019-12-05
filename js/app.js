@@ -23,7 +23,7 @@ function search(){
     } else{
         data['id'] = 8728;
     }
-    $.post("http://tiku.xuexibao.tech/api/mobile/Index/getGoods", data,
+    $.post("https://tiku.xuexibao.tech/api/mobile/Index/getGoods", data,
         function (response, textStatus, jqXHR) {
             $('#course-search-result').empty();
             coursesJson = response;
@@ -93,7 +93,7 @@ function showCourseDetail(ele){
     //获取内容
     $.ajax({
         type: "POST",
-        url: "http://tiku.xuexibao.tech/api/mobile/Index/goodsDetail",
+        url: "https://tiku.xuexibao.tech/api/mobile/Index/goodsDetail",
         data: data,
         async: false,
         headers : headers, //填入抓包的Header
@@ -150,7 +150,7 @@ function searchAnwser(){
     $.ajax({
         type: "POST",
         headers : headers,
-        url: "http://tiku.xuexibao.tech/api/mobile/Index/searchQuestion",
+        url: "https://tiku.xuexibao.tech/api/mobile/Index/searchQuestion",
         data: data,
         async: false,
         success: function (response) {
