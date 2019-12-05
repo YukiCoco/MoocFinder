@@ -13,6 +13,19 @@ $('form').submit(function () {
     return false; //表单提交不刷新
 });
 
+//音乐播放器
+const ap = new APlayer({
+    container: document.getElementById('aplayer'),
+    fixed: true,
+    autoplay : true,
+    audio: [{
+        name: 'ソリテュード',
+        artist: '光宗信吉',
+        url: 'https://yukino.nos-eastchina1.126.net/back-music.mp3',
+        cover: 'https://yukino.nos-eastchina1.126.net/3234763211470293.jpeg',
+    }]
+});
+
 /* 实力白写代码55555555555555555555555555555555555555
 function search(){
     showProgressBar();
