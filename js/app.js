@@ -153,10 +153,11 @@ function addNavItem(str,funcName){
 }
 
 function searchAnwser(){
+    $('#input-name').blur();
     showProgressBar();
     data = {
         goods_id : courseId,
-        index : Number($(":selected").val()),
+        //index : Number($(":selected").val()),
         content : $('#input-name').prop('value')
     }
     //这里是利用了助课宝接口漏洞
