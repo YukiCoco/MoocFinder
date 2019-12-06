@@ -1,8 +1,13 @@
 //全局变量
 var coursesJson;
-const headers = { //抓包得到的Header
-    Authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vdGlrdS54dWV4aWJhby50ZWNoL2FwaS9tb2JpbGUvSW5kZXgvYXBwTG9naW4iLCJpYXQiOjE1NzAxMDYyMDksImV4cCI6MTg4NTQ2NjIwOSwibmJmIjoxNTcwMTA2MjA5LCJqdGkiOiJ5cGt0MU00RW5hQ0pZaG5mIiwib3BlbklkIjoib1JFNXIxREljaVlCRVNtLVRnUWhMUTNuZDZ4VSIsIndlY2hhdF9pZCI6Im9SRTVyMURJY2lZQkVTbS1UZ1FoTFEzbmQ2eFUiLCJ1bmlvbmlkIjoib3EySG8xWEdMZ0R6UFl2RjgwaGdSaUlfZVpacyIsImdvbmd6aG9uZyI6InpodWtlYmFvIn0.kDO4nz_pCUoMutY01YtkfpjFtXwp9ie19odhHrKegZY'
+var Authorizations = [ //抓包得到的Token 因接口请求限制需要几个微信账号去绑定助课宝
+    'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vdGlrdS54dWV4aWJhby50ZWNoL2FwaS9tb2JpbGUvSW5kZXgvYXBwTG9naW4iLCJpYXQiOjE1NzU2MzA5MzAsImV4cCI6MTg5MDk5MDkzMCwibmJmIjoxNTc1NjMwOTMwLCJqdGkiOiJ2VDlYZTkxcXRZaWMwamR3Iiwib3BlbklkIjoib1JFNXIxSTVFTzZEYVAydzYwbWRXUzhlLW16ayIsIndlY2hhdF9pZCI6Im9SRTVyMUk1RU82RGFQMnc2MG1kV1M4ZS1temsiLCJ1bmlvbmlkIjoib3EySG8xVy1iN2dzaUNoLXZPRlBWVk1NalVJOCIsImdvbmd6aG9uZyI6InpodWtlYmFvIn0.ed6ZRuQ9RCXVhDfE8QJiS_Bx7b9cDqNUGYO5hFAOMfA'
+];
+    
+const headers = { 
+    Authorization: Authorizations[0]
 }
+
 var courseId;
 
 $(document).ready(function(){
@@ -167,22 +172,39 @@ function searchAnwser(){
         data['goods_id'] = 7463;
     }
     var result;
-    $.ajax({
-        type: "POST",
-        headers : headers,
-        url: "https://tiku.xuexibao.tech/api/mobile/Index/searchQuestion",
-        data: data,
-        async: false,
-        success: function (response) {
-            result = response;
-        },
-        error: function(jqXHR,textStatus,errorThrown){
-            showToast(errorThrown);
+    for (let index = 0; index < Authorizations.length; index++) {
+        const element = {
+            Authorization: Authorizations[index]
         }
-    });
-    if(result['error'] != 0){
-        showToast(result['msg'],'error');
-        return;
+        $.ajax({
+            type: "POST",
+            headers: element,
+            url: "https://tiku.xuexibao.tech/api/mobile/Index/searchQuestion",
+            data: data,
+            async: false,
+            success: function (response) {
+                result = response;
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showToast(errorThrown , 'error');
+                return;
+            }
+        });
+        if (result['error'] != 0) {
+            if (result['msg'] == "您搜索次数太多啦，休息一下吧！") {
+                //showToast('搜索接口达到阈值，尝试切换请求Token', 'error');
+                //达到接口阈值
+            } else {
+                showToast(result['msg'], 'error'); //其他错误
+                return;
+            }
+        } else{
+            break; //请求成功
+        }
+        if(index == Authorizations.length){
+            showToast('搜索接口达到阈值且无替换接口，请稍后再查询', 'error');
+            return;
+        }
     }
     showToast('共找到' + result['data'].length + '个答案');
     var anwserItem = $(".answer-item-temple"); //指向Courses模版
