@@ -6,6 +6,12 @@
 Get Start：<https://mooc.yukino.co/>
 
 ## Features
++ 查询支持
+    + 智慧树
+    + 知到
+    + 超星
+    + 尔雅
+    + 学习通
 * 纯前端实现
 * 题库全
 * 容易挂科（大雾
